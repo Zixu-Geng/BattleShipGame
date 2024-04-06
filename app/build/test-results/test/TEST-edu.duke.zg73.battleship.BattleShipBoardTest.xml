@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="edu.duke.zg73.battleship.BattleShipBoardTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2024-04-01T20:01:13" hostname="ZXdeMBP-2.lan" time="0.013">
+  <properties/>
+  <testcase name="test_Ship_Array()" classname="edu.duke.zg73.battleship.BattleShipBoardTest" time="0.001"/>
+  <testcase name="test_board_empty()" classname="edu.duke.zg73.battleship.BattleShipBoardTest" time="0.0"/>
+  <testcase name="test_enemydisplay()" classname="edu.duke.zg73.battleship.BattleShipBoardTest" time="0.001"/>
+  <testcase name="test_fireAt()" classname="edu.duke.zg73.battleship.BattleShipBoardTest" time="0.001"/>
+  <testcase name="test_width_and_height()" classname="edu.duke.zg73.battleship.BattleShipBoardTest" time="0.001"/>
+  <testcase name="test_board_ship()" classname="edu.duke.zg73.battleship.BattleShipBoardTest" time="0.001"/>
+  <testcase name="test_what_is_at_enemy()" classname="edu.duke.zg73.battleship.BattleShipBoardTest" time="0.0"/>
+  <testcase name="test_V2Factory()" classname="edu.duke.zg73.battleship.BattleShipBoardTest" time="0.0"/>
+  <testcase name="test_invalid_dimensions()" classname="edu.duke.zg73.battleship.BattleShipBoardTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

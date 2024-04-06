@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="edu.duke.zg73.battleship.AppTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2024-04-01T20:01:11" hostname="ZXdeMBP-2.lan" time="1.298">
+  <properties/>
+  <testcase name="test_main()" classname="edu.duke.zg73.battleship.AppTest" time="0.287"/>
+  <testcase name="test_main2()" classname="edu.duke.zg73.battleship.AppTest" time="0.265"/>
+  <testcase name="test_main3()" classname="edu.duke.zg73.battleship.AppTest" time="0.226"/>
+  <testcase name="test_main4()" classname="edu.duke.zg73.battleship.AppTest" time="0.383"/>
+  <testcase name="test_main5()" classname="edu.duke.zg73.battleship.AppTest" time="0.134"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

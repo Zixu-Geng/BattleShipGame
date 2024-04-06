@@ -1,0 +1,50 @@
+package edu.duke.zg73.battleship;
+
+import javax.swing.plaf.basic.BasicCheckBoxUI;
+import java.nio.charset.CoderResult;
+import java.util.HashMap;
+
+public abstract class BasicShip<T> implements Ship<T>{
+
+    protected ShipDisplayInfo<T> myDisplayInfo;
+
+    protected final HashMap<Coordinate, Boolean> myPieces;
+
+
+    public BasicShip(Iterable<Coordinate> where, ShipDisplayInfo<T> myDisplayInfo){
+        this.myPieces = new HashMap<Coordinate, Boolean>();
+        this.myDisplayInfo = myDisplayInfo;
+        for(Coordinate c: where){
+            this.myPieces.put(c, false);
+        }
+    }
+
+    @Override
+    public boolean occupiesCoordinates(Coordinate where) {
+        return this.myPieces.containsKey(where);
+
+
+    }
+
+    @Override
+    public boolean isSunk() {
+        return false;
+    }
+
+    @Override
+    public void recordHitAt(Coordinate where) {
+
+    }
+
+    @Override
+    public boolean wasHitAt(Coordinate where) {
+        return false;
+    }
+
+    @Override
+    public T getDisplayInfoAt(Coordinate where) {
+        return this.myDisplayInfo.getInfo(where, false);
+    }
+}
+				  
+

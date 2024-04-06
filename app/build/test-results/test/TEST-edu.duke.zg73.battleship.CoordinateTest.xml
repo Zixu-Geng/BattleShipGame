@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="edu.duke.zg73.battleship.CoordinateTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2024-04-01T20:01:13" hostname="ZXdeMBP-2.lan" time="0.006">
+  <properties/>
+  <testcase name="test_string_constructor_valid_cases()" classname="edu.duke.zg73.battleship.CoordinateTest" time="0.001"/>
+  <testcase name="test_hashCode()" classname="edu.duke.zg73.battleship.CoordinateTest" time="0.001"/>
+  <testcase name="test_string_constructor_error_cases()" classname="edu.duke.zg73.battleship.CoordinateTest" time="0.002"/>
+  <testcase name="test_equals()" classname="edu.duke.zg73.battleship.CoordinateTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    
+    
+    <link rel="SHORTCUT ICON" href="img/clover.ico" />
+
+    <link rel="stylesheet" href="aui/css/aui.min.css" media="all"/>
+    <link rel="stylesheet" href="aui/css/aui-experimental.min.css" media="all"/>
+    <!--[if IE 9]><link rel="stylesheet" href="aui/css/aui-ie9.min.css" media="all"/><![endif]-->
+
+    <style type="text/css" media="all">
+        @import url('style.css');
+        @import url('tree.css');
+        
+    </style>
+
+    <script src="jquery-1.8.3.min.js" type="text/javascript"></script>
+    <script src="aui/js/aui.min.js" type="text/javascript"></script>
+    <script src="aui/js/aui-experimental.min.js" type="text/javascript"></script>
+    <script src="aui/js/aui-soy.min.js" type="text/javascript"></script>
+
+    <script src="package-nodes-tree.js" type="text/javascript"></script>
+    <script src="clover-tree.js" type="text/javascript"></script>
+    <script src="clover.js" type="text/javascript"></script>
+    <script src="clover-descriptions.js" type="text/javascript"></script>
+    <script src="cloud.js" type="text/javascript"></script>
+
+            <title>app</title>
+    </head>
+
+<body onresize="processTreeMapDashJson(treeMapJson);" >
+    <div id="page">
+        
+        
+
+
+<header id="header" role="banner">
+    <nav class="aui-header aui-dropdown2-trigger-group" role="navigation">
+        <div class="aui-header-inner">
+            <div class="aui-header-primary">
+                <h1 id="logo" class="aui-header-logo aui-header-logo-clover">
+                    <a href="http://openclover.org" title="Visit OpenClover home page"><span class="aui-header-logo-device">OpenClover</span></a>
+                </h1>
+                            </div>
+            <div class="aui-header-secondary">
+                <ul class="aui-nav">
+                    <li id="system-help-menu">
+                        <a class="aui-nav-link" title="Open online documentation" target="_blank"
+                           href="http://openclover.org/documentation">
+                            <span class="aui-icon aui-icon-small aui-iconfont-help">&#160;Help</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+        
+        <div class="aui-page-panel">
+            <div class="aui-page-panel-inner">
+                <div class="aui-page-panel-nav aui-page-panel-nav-clover">
+                    
+
+<div class="aui-page-header-inner" style="margin-bottom: 20px;">
+    <div class="aui-page-header-image">
+                <div class="aui-avatar aui-avatar-large aui-avatar-project">
+            <div class="aui-avatar-inner">
+                                    <img src="img/clover_logo_large.png" alt="Clover icon"/>
+                            </div>
+        </div>
+            </div>
+    <div class="aui-page-header-main" >
+        <h1>
+                                        app
+                                </h1>
+    </div>
+</div>
+
+<nav class="aui-navgroup aui-navgroup-vertical">
+    <div class="aui-navgroup-inner">
+                                            <ul class="aui-nav">
+                <li class="aui-nav-selected">
+                    <a href="dashboard.html">Project overview</a>
+                </li>
+            </ul>
+        
+                <div class="aui-nav-heading packages-nav-heading">
+            <strong>Packages</strong>
+        </div>
+        <div class="aui-nav project-packages">
+            <form method="get" action="#" class="aui package-filter-container">
+                <input type="text" autocomplete="off" class="package-filter text"
+                       placeholder="Type to filter packages..." name="package-filter" id="package-filter"
+                       title="Start typing package name (or part of the name) to search through the tree. Use arrow keys and the Enter key to navigate."/>
+            </form>
+            <p class="package-filter-no-results-message hidden">
+                <small>No results found.</small>
+            </p>
+                                                  <div class="packages-tree-wrapper" data-root-relative="" data-package-name="">
+                <div class="packages-tree-container"></div>
+                <div class="clover-packages-lozenges"></div>
+            </div>
+        </div>
+        
+            </div>
+</nav>                </div>
+                <section class="aui-page-panel-content">
+                    <div class="aui-page-panel-content-clover">
+
+                    
+                    <ol class="aui-nav aui-nav-breadcrumbs">
+            
+        <li><a href="dashboard.html">Project Clover database 周一 4月 1 2024 15:39:07 EDT</a></li>
+    </ol>
+    
+<h1 class="aui-h2-clover">
+            Project overview
+    </h1>
+<div class="aui-tabs horizontal-tabs">
+        <ul class="tabs-menu">
+            <li class="menu-item active-tab">
+            <a href="dashboard.html">Dashboard</a>
+        </li>
+                <li class="menu-item ">
+            <a href="pkg-summary.html"><strong>Application code</strong></a>
+        </li>
+                <li class="menu-item ">
+            <a href="testsrc-pkg-summary.html"><strong>Test code</strong></a>
+        </li>
+        <li class="menu-item ">
+            <a href="test-pkg-summary.html"><strong>Test results</strong></a>
+        </li>
+                <li class="menu-item ">
+            <a href="top-risks.html"><strong>Top risks</strong></a>
+        </li>
+        <li class="menu-item ">
+            <a href="quick-wins.html"><strong>Quick wins</strong></a>
+        </li>
+                                                <li class="menu-item ">
+                <a href="treemap.html"><strong>Coverage tree map</strong></a>
+            </li>
+            </ul>
+    <div class="tabs-pane active-pane" id="tabs-first">
+
+        <div>&#160;</div>
+
+
+
+
+
+
+<div class="aui-group">
+    <div class="aui-item">
+        <div class="dashboard-widget">
+            <header class="dashboard-widget-header">
+                
+                <h3>
+                    Code coverage
+                    <small style="float:right; font-weight: normal">
+                        34 classes,
+                        1,800 /
+                        1,847 elements
+                    </small>
+                </h3>
+            </header>
+            <div class="dashboard-widget-content">
+                <div style="display: table; width: 100%">
+<div class="barGraphValue"><span class="sortValue">0.97455335</span>97.5%</div><div style="display: table-cell">
+ <div title="97.5% Covered"  style="min-width:200px;" class="barNegative contribBarNegative "><div class="barPositive contribBarPositive " style="width:97.5%"></div></div></div></div>
+                <p><a href="pkg-summary.html">See more</a></p>
+            </div>
+        </div>
+
+        <div class="dashboard-widget">
+            <header class="dashboard-widget-header">
+                <h3>
+                    Test results
+                    <small style="float:right; font-weight: normal">
+                        0 /
+                        0 tests
+                        0 secs
+                    </small>
+                </h3>
+            </header>
+            <div class="dashboard-widget-content">
+                                        <div class="aui-message aui-message-warning">
+        <p class="title">
+            <strong>No test results</strong>
+        </p>
+        <p>No test results could be found. Please ensure that you have instrumented your unit tests correctly.</p>
+    </div>
+                                <p><a href="test-pkg-summary.html">See more</a></p>
+            </div>
+        </div>
+
+        <div class="dashboard-widget">
+            <header class="dashboard-widget-header">
+                <h3>Code metrics</h3>
+            </header>
+                         
+
+<div id="$statsId" class="aui-item" style="display: ${display}">
+<div style="display: table">
+    <div class="stats-box">
+        <div class="stats-box-label"><label title="Total number of branches in this project">Branches:</label></div>
+        <div class="stats-box-value">272</div>
+    </div>
+    <div class="stats-box">
+        <div class="stats-box-label"><label title="Total number of statements in this project">Statements:</label></div>
+        <div class="stats-box-value">1,396</div>
+    </div>
+    <div class="stats-box">
+        <div class="stats-box-label"><label title="Total number of methods in this project">Methods:</label></div>
+        <div class="stats-box-value">179</div>
+    </div>
+    <div class="stats-box">
+        <div class="stats-box-label"><label title="Total number of classes in this project">Classes:</label></div>
+        <div class="stats-box-value">34</div>
+    </div>
+            <div class="stats-box">
+            <div class="stats-box-label"><label title="Total number of files in this project">Files:</label></div>
+            <div class="stats-box-value">33</div>
+        </div>
+                <div class="stats-box">
+            <div class="stats-box-label"><label title="Total number of packages in this project">Packages:</label></div>
+            <div class="stats-box-value">2</div>
+        </div>
+        <div class="stats-box">
+        <div class="stats-box-label"><label title="Total number of lines of code in this project">LOC:</label></div>
+        <div class="stats-box-value">4,432</div>
+    </div>
+    <div class="stats-box">
+        <div class="stats-box-label"><label title="Total number of non-comment lines of code in this project">NCLOC:</label></div>
+        <div class="stats-box-value">3,037</div>
+    </div>
+    <div class="stats-box">
+        <div class="stats-box-label"><label title="Cyclomatic complexity is the number of paths in this project">Total complexity:</label></div>
+        <div class="stats-box-value">370</div>
+    </div>
+    <div class="stats-box">
+        <div class="stats-box-label">
+            <label title="Complexity density is the complexity divided by the number of statements in this project">Complexity density:</label>
+        </div>
+        <div class="stats-box-value">0.27</div>
+    </div>
+    <div class="stats-box">
+        <div class="stats-box-label"><label title="Number of statements per method.">Statements/Method:</label></div>
+        <div class="stats-box-value">7.8</div>
+    </div>
+    <div class="stats-box">
+        <div class="stats-box-label"><label title="Number of methods per class.">Methods/Class:</label></div>
+        <div class="stats-box-value">5.26</div>
+    </div>
+            <div class="stats-box">
+            <div class="stats-box-label"><label title="Number of classes per package.">Classes/Package:</label></div>
+            <div class="stats-box-value">17</div>
+        </div>
+        <div class="stats-box">
+        <div class="stats-box-label"><label title="Complexity divided by the number of methods in this project">Average method complexity:</label></div>
+        <div class="stats-box-value">2.07</div>
+    </div>
+</div>
+
+</div>        </div>
+
+                <div class="dashboard-widget">
+            <header class="dashboard-widget-header">
+                <h3>Class Coverage Distribution</h3>
+            </header>
+            <div class="dashboard-widget-content">
+                <div style="text-align: center">                     <img src="img/classDistrubutionChart.png" alt="img/classDistrubutionChart.png" usemap="#classDistrubutionChart.png"/>
+                </div>
+                <map id="classDistrubutionChart.png" name="classDistrubutionChart.png">
+<area shape="rect" coords="288,15,310,206" title="29 classes have 91-100% coverage" alt="" nohref="nohref"/>
+<area shape="rect" coords="38,200,60,206" title="1 class has 0% coverage" alt="" nohref="nohref"/>
+</map>
+            </div>
+        </div>
+        
+                <div class="dashboard-widget">
+            <header class="dashboard-widget-header">
+                <h3>Class Complexity</h3>
+            </header>
+            <div class="dashboard-widget-content">
+                <div style="text-align: center">
+                    <img src="img/classComplexityChart.png" alt="img/classComplexityChart.png" usemap="#classComplexityChart.png"/>
+                </div>
+                <map id="classComplexityChart.png" name="classComplexityChart.png">
+<area shape="poly" coords="304,197,302,199,299,197,302,194,304,197,304,197" title="Complexity: 4; Coverage: 100%; Class: CoordinateTest" alt="" href="edu/duke/zg73/battleship/CoordinateTest.html#CoordinateTest"/>
+<area shape="poly" coords="304,172,302,174,299,172,302,169,304,172,304,172" title="Complexity: 12; Coverage: 100%; Class: BattleShipBoardTest" alt="" href="edu/duke/zg73/battleship/BattleShipBoardTest.html#BattleShipBoardTest"/>
+<area shape="poly" coords="304,206,302,208,299,206,302,203,304,206,304,206" title="Complexity: 1; Coverage: 100%; Class: NoCollisionRuleCheckerTest" alt="" href="edu/duke/zg73/battleship/NoCollisionRuleCheckerTest.html#NoCollisionRuleCheckerTest"/>
+<area shape="poly" coords="304,206,302,208,299,206,302,203,304,206,304,206" title="Complexity: 1; Coverage: 100%; Class: NoCollisionRuleCheckerTest" alt="" href="edu/duke/zg73/battleship/NoCollisionRuleCheckerTest.html#NoCollisionRuleCheckerTest"/>
+<area shape="poly" coords="304,190,302,193,299,190,302,188,304,190,304,190" title="Complexity: 6; Coverage: 100%; Class: BoardTextViewTest" alt="" href="edu/duke/zg73/battleship/BoardTextViewTest.html#BoardTextViewTest"/>
+<area shape="poly" coords="304,194,302,196,299,194,302,191,304,194,304,194" title="Complexity: 5; Coverage: 100%; Class: AppTest" alt="" href="edu/duke/zg73/battleship/AppTest.html#AppTest"/>
+<area shape="poly" coords="304,95,302,97,299,95,302,92,304,95,304,95" title="Complexity: 37; Coverage: 100%; Class: TextPlayerTest" alt="" href="edu/duke/zg73/battleship/TextPlayerTest.html#TextPlayerTest"/>
+<area shape="poly" coords="304,200,302,202,299,200,302,197,304,200,304,200" title="Complexity: 3; Coverage: 100%; Class: BasicShipTest" alt="" href="edu/duke/zg73/battleship/BasicShipTest.html#BasicShipTest"/>
+<area shape="poly" coords="304,200,302,202,299,200,302,197,304,200,304,200" title="Complexity: 3; Coverage: 100%; Class: BasicShipTest" alt="" href="edu/duke/zg73/battleship/BasicShipTest.html#BasicShipTest"/>
+<area shape="poly" coords="304,203,302,205,299,203,302,200,304,203,304,203" title="Complexity: 2; Coverage: 100%; Class: ShapedShipTest" alt="" href="edu/duke/zg73/battleship/ShapedShipTest.html#ShapedShipTest"/>
+<area shape="poly" coords="304,203,302,205,299,203,302,200,304,203,304,203" title="Complexity: 2; Coverage: 100%; Class: ShapedShipTest" alt="" href="edu/duke/zg73/battleship/ShapedShipTest.html#ShapedShipTest"/>
+<area shape="poly" coords="304,203,302,205,299,203,302,200,304,203,304,203" title="Complexity: 2; Coverage: 100%; Class: ShapedShipTest" alt="" href="edu/duke/zg73/battleship/ShapedShipTest.html#ShapedShipTest"/>
+<area shape="poly" coords="304,190,302,193,299,190,302,188,304,190,304,190" title="Complexity: 6; Coverage: 100%; Class: BoardTextViewTest" alt="" href="edu/duke/zg73/battleship/BoardTextViewTest.html#BoardTextViewTest"/>
+<area shape="poly" coords="304,135,302,137,299,135,302,132,304,135,304,135" title="Complexity: 24; Coverage: 100%; Class: Placement" alt="" href="edu/duke/zg73/battleship/Placement.html#Placement"/>
+<area shape="poly" coords="304,172,302,174,299,172,302,169,304,172,304,172" title="Complexity: 12; Coverage: 100%; Class: BattleShipBoardTest" alt="" href="edu/duke/zg73/battleship/BattleShipBoardTest.html#BattleShipBoardTest"/>
+<area shape="poly" coords="304,166,302,168,299,166,302,163,304,166,304,166" title="Complexity: 14; Coverage: 100%; Class: BoardTextView" alt="" href="edu/duke/zg73/battleship/BoardTextView.html#BoardTextView"/>
+<area shape="poly" coords="304,184,302,187,299,184,302,182,304,184,304,184" title="Complexity: 8; Coverage: 100%; Class: TextPlayer.AILogic" alt="" href="edu/duke/zg73/battleship/TextPlayer.html#TextPlayer.AILogic"/>
+<area shape="poly" coords="304,18,302,20,299,18,302,15,304,18,304,18" title="Complexity: 62; Coverage: 100%; Class: TextPlayer" alt="" href="edu/duke/zg73/battleship/TextPlayer.html#TextPlayer"/>
+<area shape="poly" coords="304,157,302,159,299,157,302,154,304,157,304,157" title="Complexity: 17; Coverage: 100%; Class: BasicShip" alt="" href="edu/duke/zg73/battleship/BasicShip.html#BasicShip"/>
+<area shape="poly" coords="304,172,302,174,299,172,302,169,304,172,304,172" title="Complexity: 12; Coverage: 100%; Class: BattleShipBoardTest" alt="" href="edu/duke/zg73/battleship/BattleShipBoardTest.html#BattleShipBoardTest"/>
+<area shape="poly" coords="304,190,302,193,299,190,302,188,304,190,304,190" title="Complexity: 6; Coverage: 100%; Class: BoardTextViewTest" alt="" href="edu/duke/zg73/battleship/BoardTextViewTest.html#BoardTextViewTest"/>
+<area shape="poly" coords="304,190,302,193,299,190,302,188,304,190,304,190" title="Complexity: 6; Coverage: 100%; Class: BoardTextViewTest" alt="" href="edu/duke/zg73/battleship/BoardTextViewTest.html#BoardTextViewTest"/>
+<area shape="poly" coords="304,33,302,36,299,33,302,31,304,33,304,33" title="Complexity: 57; Coverage: 100%; Class: BattleShipBoard" alt="" href="edu/duke/zg73/battleship/BattleShipBoard.html#BattleShipBoard"/>
+<area shape="poly" coords="304,172,302,174,299,172,302,169,304,172,304,172" title="Complexity: 12; Coverage: 100%; Class: BattleShipBoardTest" alt="" href="edu/duke/zg73/battleship/BattleShipBoardTest.html#BattleShipBoardTest"/>
+<area shape="poly" coords="304,200,302,202,299,200,302,197,304,200,304,200" title="Complexity: 3; Coverage: 100%; Class: BasicShipTest" alt="" href="edu/duke/zg73/battleship/BasicShipTest.html#BasicShipTest"/>
+<area shape="poly" coords="304,200,302,202,299,200,302,197,304,200,304,200" title="Complexity: 3; Coverage: 100%; Class: BasicShipTest" alt="" href="edu/duke/zg73/battleship/BasicShipTest.html#BasicShipTest"/>
+<area shape="poly" coords="304,169,302,171,299,169,302,166,304,169,304,169" title="Complexity: 13; Coverage: 100%; Class: Coordinate" alt="" href="edu/duke/zg73/battleship/Coordinate.html#Coordinate"/>
+<area shape="poly" coords="304,144,302,147,299,144,302,142,304,144,304,144" title="Complexity: 21; Coverage: 100%; Class: ShapedShip" alt="" href="edu/duke/zg73/battleship/ShapedShip.html#ShapedShip"/>
+<area shape="poly" coords="304,197,302,199,299,197,302,194,304,197,304,197" title="Complexity: 4; Coverage: 100%; Class: CoordinateTest" alt="" href="edu/duke/zg73/battleship/CoordinateTest.html#CoordinateTest"/>
+<area shape="poly" coords="54,172,52,174,49,172,52,169,54,172,54,172" title="Complexity: 12; Coverage: 0%; Class: CommunicateUtils" alt="" href="edu/duke/zg73/battleship/Utils/CommunicateUtils.html#CommunicateUtils"/>
+</map>
+            </div>
+        </div>
+        
+                    <div class="dashboard-widget">
+                <header class="dashboard-widget-header">
+                    <h3>Coverage tree map</h3>
+                </header>
+                <div class="dashboard-widget-content">
+                    <div id="infovis" style="width:100%; height:250px;">
+                        <div id="treemap-loader" style="position:relative;top:50px;">
+                            <p>
+                                Generating Coverage Tree Map. Please wait...
+                            </p>
+                            <p>
+                                <img src="img/ajax-loader.gif" alt="Loading Treemap"/>
+                            </p>
+                        </div>
+                    </div>
+                    <p><a href="treemap.html">See more</a></p>
+                </div>
+
+            </div>
+            </div>
+
+
+    <div class="aui-item">
+        <div class="dashboard-widget">
+            <header class="dashboard-widget-header">
+                <h3>Top 1 project risks</h3>
+            </header>
+            <div class="dashboard-widget-content">
+                
+                                                                <a class="tag" href="edu/duke/zg73/battleship/Utils/CommunicateUtils.html"
+                            style="font-size: 28px;color:#d04437"
+                            title="Average Method Complexity - 3 , Coverage - 0% ">CommunicateUtils</a>
+                                                    <p><a href="top-risks.html">See more</a></p>
+            </div>
+        </div>
+
+        <div class="dashboard-widget">
+            <header class="dashboard-widget-header">
+                <h3>Most complex packages</h3>
+            </header>
+            <div class="dashboard-widget-content">
+                
+                <table class="aui">
+                                            
+                                                <tr>
+                            <td>1. </td>
+                            <td><div style="display: table; width: 100%">
+<div class="barGraphValue"><span class="sortValue">1.0</span>100%</div><div style="display: table-cell">
+ <div title="100% Covered"  style="min-width:40px;" class="barNegative contribBarNegative "><div class="barPositive contribBarPositive " style="width:100%"></div></div></div></div></td>
+                            <td>
+                                <a href="edu/duke/zg73/battleship/pkg-summary.html">edu.duke.zg73.battleship</a>
+                                <span class="aui-badge" title="Package complexity">358</span>
+                            </td>
+                        </tr>
+                                            
+                                                <tr>
+                            <td>2. </td>
+                            <td><div style="display: table; width: 100%">
+<div class="barGraphValue"><span class="sortValue">0.0</span>0%</div><div style="display: table-cell">
+ <div title="0% Covered"  style="min-width:40px;" class="barNegative contribBarNegative "><div class="barPositive contribBarPositive " style="width:0%"></div></div></div></div></td>
+                            <td>
+                                <a href="edu/duke/zg73/battleship/Utils/pkg-summary.html">edu.duke.zg73.battleship.Utils</a>
+                                <span class="aui-badge" title="Package complexity">12</span>
+                            </td>
+                        </tr>
+                                    </table>
+            </div>
+        </div>
+
+        <div class="dashboard-widget">
+            <header class="dashboard-widget-header">
+                <h3>Most complex classes</h3>
+            </header>
+            <div class="dashboard-widget-content">
+                <table class="aui">
+                                            
+                                                <tr>
+                            <td>1. </td>
+                            <td><div style="display: table; width: 100%">
+<div class="barGraphValue"><span class="sortValue">1.0</span>100%</div><div style="display: table-cell">
+ <div title="100% Covered"  style="min-width:40px;" class="barNegative contribBarNegative "><div class="barPositive contribBarPositive " style="width:100%"></div></div></div></div></td>
+                            <td>
+                                <a  href="edu/duke/zg73/battleship/TextPlayer.html"  title="edu.duke.zg73.battleship.TextPlayer">TextPlayer</a>
+                                <span class="aui-badge" title="Class complexity">62</span>
+                            </td>
+                        </tr>
+                                            
+                                                <tr>
+                            <td>2. </td>
+                            <td><div style="display: table; width: 100%">
+<div class="barGraphValue"><span class="sortValue">1.0</span>100%</div><div style="display: table-cell">
+ <div title="100% Covered"  style="min-width:40px;" class="barNegative contribBarNegative "><div class="barPositive contribBarPositive " style="width:100%"></div></div></div></div></td>
+                            <td>
+                                <a  href="edu/duke/zg73/battleship/BattleShipBoard.html"  title="edu.duke.zg73.battleship.BattleShipBoard">BattleShipBoard</a>
+                                <span class="aui-badge" title="Class complexity">57</span>
+                            </td>
+                        </tr>
+                                            
+                                                <tr>
+                            <td>3. </td>
+                            <td><div style="display: table; width: 100%">
+<div class="barGraphValue"><span class="sortValue">1.0</span>100%</div><div style="display: table-cell">
+ <div title="100% Covered"  style="min-width:40px;" class="barNegative contribBarNegative "><div class="barPositive contribBarPositive " style="width:100%"></div></div></div></div></td>
+                            <td>
+                                <a  href="edu/duke/zg73/battleship/TextPlayerTest.html"  title="edu.duke.zg73.battleship.TextPlayerTest">TextPlayerTest</a>
+                                <span class="aui-badge" title="Class complexity">37</span>
+                            </td>
+                        </tr>
+                                            
+                                                <tr>
+                            <td>4. </td>
+                            <td><div style="display: table; width: 100%">
+<div class="barGraphValue"><span class="sortValue">1.0</span>100%</div><div style="display: table-cell">
+ <div title="100% Covered"  style="min-width:40px;" class="barNegative contribBarNegative "><div class="barPositive contribBarPositive " style="width:100%"></div></div></div></div></td>
+                            <td>
+                                <a  href="edu/duke/zg73/battleship/Placement.html"  title="edu.duke.zg73.battleship.Placement">Placement</a>
+                                <span class="aui-badge" title="Class complexity">24</span>
+                            </td>
+                        </tr>
+                                            
+                                                <tr>
+                            <td>5. </td>
+                            <td><div style="display: table; width: 100%">
+<div class="barGraphValue"><span class="sortValue">1.0</span>100%</div><div style="display: table-cell">
+ <div title="100% Covered"  style="min-width:40px;" class="barNegative contribBarNegative "><div class="barPositive contribBarPositive " style="width:100%"></div></div></div></div></td>
+                            <td>
+                                <a  href="edu/duke/zg73/battleship/ShapedShip.html"  title="edu.duke.zg73.battleship.ShapedShip">ShapedShip</a>
+                                <span class="aui-badge" title="Class complexity">21</span>
+                            </td>
+                        </tr>
+                                    </table>
+            </div>
+        </div>
+
+                <div class="dashboard-widget">
+            <header class="dashboard-widget-header">
+                <h3>Least tested methods</h3>
+            </header>
+            <div class="dashboard-widget-content">
+                <table class="aui">
+                                            
+
+                    <tr>
+                        <td align="right">1.</td>
+                        <td align="right"><div style="display: table; width: 100%">
+<div class="barGraphValue"><span class="sortValue">0.0</span>0%</div><div style="display: table-cell">
+ <div title="0% Covered"  style="min-width:40px;" class="barNegative contribBarNegative "><div class="barPositive contribBarPositive " style="width:0%"></div></div></div></div></td>
+                        <td>
+                              <!-- normal method -->
+                                                      <a title="CommunicateUtils.recv(String,Socket)&#160;:&#160;Object" href="edu/duke/zg73/battleship/Utils/CommunicateUtils.html?line=46#src-46">CommunicateUtils.recv(String,Socket)&#160;:&#160;Object</a>
+                            <span class="aui-badge" title="Method complexity">5</span>
+
+                        </td>
+                    </tr>
+                                            
+
+                    <tr>
+                        <td align="right">2.</td>
+                        <td align="right"><div style="display: table; width: 100%">
+<div class="barGraphValue"><span class="sortValue">0.0</span>0%</div><div style="display: table-cell">
+ <div title="0% Covered"  style="min-width:40px;" class="barNegative contribBarNegative "><div class="barPositive contribBarPositive " style="width:0%"></div></div></div></div></td>
+                        <td>
+                              <!-- normal method -->
+                                                      <a title="CommunicateUtils.send(String,Socket,Serializable)&#160;:&#160;void" href="edu/duke/zg73/battleship/Utils/CommunicateUtils.html?line=18#src-18">CommunicateUtils.send(String,Socket,Serializable)&#160;:&#160;void</a>
+                            <span class="aui-badge" title="Method complexity">3</span>
+
+                        </td>
+                    </tr>
+                                            
+
+                    <tr>
+                        <td align="right">3.</td>
+                        <td align="right"><div style="display: table; width: 100%">
+<div class="barGraphValue"><span class="sortValue">0.0</span>0%</div><div style="display: table-cell">
+ <div title="0% Covered"  style="min-width:40px;" class="barNegative contribBarNegative "><div class="barPositive contribBarPositive " style="width:0%"></div></div></div></div></td>
+                        <td>
+                              <!-- normal method -->
+                                                      <a title="CommunicateUtils.sendEncryptedObject(Socket,Serializable)&#160;:&#160;String" href="edu/duke/zg73/battleship/Utils/CommunicateUtils.html?line=100#src-100">CommunicateUtils.sendEncryptedObject(Socket,Serializable)&#160;:&#160;String</a>
+                            <span class="aui-badge" title="Method complexity">2</span>
+
+                        </td>
+                    </tr>
+                                            
+
+                    <tr>
+                        <td align="right">4.</td>
+                        <td align="right"><div style="display: table; width: 100%">
+<div class="barGraphValue"><span class="sortValue">0.0</span>0%</div><div style="display: table-cell">
+ <div title="0% Covered"  style="min-width:40px;" class="barNegative contribBarNegative "><div class="barPositive contribBarPositive " style="width:0%"></div></div></div></div></td>
+                        <td>
+                              <!-- normal method -->
+                                                      <a title="CommunicateUtils.receiveDecryptedObject(Socket)&#160;:&#160;Object" href="edu/duke/zg73/battleship/Utils/CommunicateUtils.html?line=83#src-83">CommunicateUtils.receiveDecryptedObject(Socket)&#160;:&#160;Object</a>
+                            <span class="aui-badge" title="Method complexity">2</span>
+
+                        </td>
+                    </tr>
+                                    </table>
+            </div>
+        </div>
+        
+    </div>
+</div>
+                            </div> <!-- tabs-pane active-pane -->
+                        </div>
+
+    <script type="text/javascript" src="jit.js" ></script>
+    <script type="text/javascript" src="treemap-dash-json.js" ></script>
+
+                        </div> <!-- class="aui-page-panel-content-clover" -->
+                    <footer id="footer" role="contentinfo">
+    <section class="footer-body">
+        <ul>
+            <li>
+                Report generated by <a target="_new" href="http://openclover.org">OpenClover</a> v 4.4.1
+                on 周一 4月 1 2024 15:39:08 EDT using coverage data from 周一 4月 1 2024 15:39:07 EDT.
+            </li>
+        </ul>
+        <ul>
+            <li>OpenClover is free and open-source software. </li>
+        </ul>
+    </section>
+</footer>                </section> <!-- class="aui-page-panel-content" -->
+            </div> <!-- class="aui-page-panel-inner" -->
+        </div> <!-- class="aui-page-panel" -->
+    </div> <!-- id="page" -->
+</body>
+</html>

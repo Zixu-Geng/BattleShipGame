@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="edu.duke.zg73.battleship.TextPlayerTest" tests="31" skipped="0" failures="0" errors="0" timestamp="2024-04-01T20:01:13" hostname="ZXdeMBP-2.lan" time="0.073">
+  <properties/>
+  <testcase name="test_moveDestroyer()" classname="edu.duke.zg73.battleship.TextPlayerTest" time="0.002"/>
+  <testcase name="test_scan()" classname="edu.duke.zg73.battleship.TextPlayerTest" time="0.002"/>
+  <testcase name="test_playoneturn_exception()" classname="edu.duke.zg73.battleship.TextPlayerTest" time="0.001"/>
+  <testcase name="test_move_afterfire_shaped()" classname="edu.duke.zg73.battleship.TextPlayerTest" time="0.003"/>
+  <testcase name="test_do_one_placement()" classname="edu.duke.zg73.battleship.TextPlayerTest" time="0.003"/>
+  <testcase name="test_getavaiable()" classname="edu.duke.zg73.battleship.TextPlayerTest" time="0.002"/>
+  <testcase name="test_moveSub()" classname="edu.duke.zg73.battleship.TextPlayerTest" time="0.001"/>
+  <testcase name="test_doaction_M()" classname="edu.duke.zg73.battleship.TextPlayerTest" time="0.001"/>
+  <testcase name="test_playoneturn_move_exception()" classname="edu.duke.zg73.battleship.TextPlayerTest" time="0.0"/>
+  <testcase name="test_moveBattleships()" classname="edu.duke.zg73.battleship.TextPlayerTest" time="0.001"/>
+  <testcase name="test_playoneturn_move()" classname="edu.duke.zg73.battleship.TextPlayerTest" time="0.001"/>
+  <testcase name="test_scan_exception()" classname="edu.duke.zg73.battleship.TextPlayerTest" time="0.002"/>
+  <testcase name="test_doaction_M2()" classname="edu.duke.zg73.battleship.TextPlayerTest" time="0.001"/>
+  <testcase name="test_doaction_M3()" classname="edu.duke.zg73.battleship.TextPlayerTest" time="0.002"/>
+  <testcase name="test_moveCarrier()" classname="edu.duke.zg73.battleship.TextPlayerTest" time="0.001"/>
+  <testcase name="test_playoneturn()" classname="edu.duke.zg73.battleship.TextPlayerTest" time="0.005"/>
+  <testcase name="test_playoneturn_exception2()" classname="edu.duke.zg73.battleship.TextPlayerTest" time="0.0"/>
+  <testcase name="test_doPlacementPhase()" classname="edu.duke.zg73.battleship.TextPlayerTest" time="0.003"/>
+  <testcase name="test_move_afterfire()" classname="edu.duke.zg73.battleship.TextPlayerTest" time="0.002"/>
+  <testcase name="test_do_one_placement_exception()" classname="edu.duke.zg73.battleship.TextPlayerTest" time="0.001"/>
+  <testcase name="test_read_placement()" classname="edu.duke.zg73.battleship.TextPlayerTest" time="0.0"/>
+  <testcase name="test_movediffernetOrientation_B2()" classname="edu.duke.zg73.battleship.TextPlayerTest" time="0.004"/>
+  <testcase name="test_movediffernetOrientation_B3()" classname="edu.duke.zg73.battleship.TextPlayerTest" time="0.003"/>
+  <testcase name="test_movediffernetOrientation_C1()" classname="edu.duke.zg73.battleship.TextPlayerTest" time="0.005"/>
+  <testcase name="test_movediffernetOrientation_S2()" classname="edu.duke.zg73.battleship.TextPlayerTest" time="0.002"/>
+  <testcase name="test_move_afterfire2()" classname="edu.duke.zg73.battleship.TextPlayerTest" time="0.002"/>
+  <testcase name="test_movediffernetOrientation_B()" classname="edu.duke.zg73.battleship.TextPlayerTest" time="0.002"/>
+  <testcase name="test_movediffernetOrientation_C()" classname="edu.duke.zg73.battleship.TextPlayerTest" time="0.002"/>
+  <testcase name="test_movediffernetOrientation_S()" classname="edu.duke.zg73.battleship.TextPlayerTest" time="0.001"/>
+  <testcase name="test_scan2()" classname="edu.duke.zg73.battleship.TextPlayerTest" time="0.001"/>
+  <testcase name="test_scan3()" classname="edu.duke.zg73.battleship.TextPlayerTest" time="0.002"/>
+  <system-out><![CDATA[===
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

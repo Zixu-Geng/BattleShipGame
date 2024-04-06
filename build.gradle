@@ -1,0 +1,15 @@
+//project(':app') {
+//
+//}
+//
+//project(':Client') {
+//    dependencies {
+//        implementation project(':app')
+//    }
+//}
+//
+//project(':Server') {
+//    dependencies {
+//        implementation project(':app')
+//    }
+//}

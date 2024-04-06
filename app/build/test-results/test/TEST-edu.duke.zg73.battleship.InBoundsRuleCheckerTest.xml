@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="edu.duke.zg73.battleship.InBoundsRuleCheckerTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-04-01T20:01:13" hostname="ZXdeMBP-2.lan" time="0.0">
+  <properties/>
+  <testcase name="test_InBoundRuleChecker()" classname="edu.duke.zg73.battleship.InBoundsRuleCheckerTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

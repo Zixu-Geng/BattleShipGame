@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="edu.duke.zg73.battleship.V2ShipFactoryTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2024-04-01T20:01:13" hostname="ZXdeMBP-2.lan" time="0.003">
+  <properties/>
+  <testcase name="test_createship_exception()" classname="edu.duke.zg73.battleship.V2ShipFactoryTest" time="0.002"/>
+  <testcase name="test_createship()" classname="edu.duke.zg73.battleship.V2ShipFactoryTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
