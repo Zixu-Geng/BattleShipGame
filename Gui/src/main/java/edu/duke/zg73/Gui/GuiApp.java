@@ -6,6 +6,7 @@ import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.TextInputDialog;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -15,18 +16,20 @@ public class GuiApp extends Application {
     private GuiPlayer player1;
     private GuiPlayer player2;
 
+    private AiPlayer aiPlayer;
+
     @Override
     public void start(Stage primaryStage) {
-        List<String> choices = Arrays.asList("本地玩家对战", "与电脑对战");
-        ChoiceDialog<String> gameModeDialog = new ChoiceDialog<>("本地玩家对战", choices);
-        gameModeDialog.setTitle("选择游戏模式");
-        gameModeDialog.setHeaderText("选择游戏模式");
-        gameModeDialog.setContentText("请选择:");
+        List<String> choices = Arrays.asList("Play with local player", "Player with computer");
+        ChoiceDialog<String> gameModeDialog = new ChoiceDialog<>("Play with local player", choices);
+        gameModeDialog.setTitle("Game mode");
+        gameModeDialog.setHeaderText("Choose your Game mode");
+        gameModeDialog.setContentText("Please choose:");
 
         Optional<String> gameModeResult = gameModeDialog.showAndWait();
 
         gameModeResult.ifPresent(gameMode -> {
-            if (gameMode.equals("本地玩家对战")) {
+            if (gameMode.equals("Play with local player")) {
                 promptForPlayerNames(true, primaryStage);
             } else {
                 promptForPlayerNames(false, primaryStage);
@@ -36,27 +39,85 @@ public class GuiApp extends Application {
 
     private void promptForPlayerNames(boolean isLocalMultiplayer, Stage primaryStage) {
         TextInputDialog dialog = new TextInputDialog("Player");
-        dialog.setTitle("玩家设置");
-        dialog.setHeaderText(isLocalMultiplayer ? "玩家 1 设置" : "玩家设置");
-        dialog.setContentText("请输入玩家名字:");
+        dialog.setTitle("Player configuration");
+        dialog.setHeaderText(isLocalMultiplayer ? "player 1 configuration" : "player configuration");
+        dialog.setContentText("Please enter Player name:");
 
         Optional<String> result = dialog.showAndWait();
 
         if (isLocalMultiplayer) {
             result.ifPresent(name1 -> {
                 TextInputDialog dialog2 = new TextInputDialog("Player 2");
-                dialog2.setTitle("玩家设置");
-                dialog2.setHeaderText("玩家 2 设置");
-                dialog2.setContentText("请输入玩家 2 的名字:");
+                dialog2.setTitle("player configuration");
+                dialog2.setHeaderText("player 2 configuration");
+                dialog2.setContentText("Please enter 2 name:");
 
                 Optional<String> result2 = dialog2.showAndWait();
                 result2.ifPresent(name2 -> setupGame(name1, name2, primaryStage));
             });
         } else {
-            result.ifPresent(name -> setupGame(name, "AI", primaryStage));
+            result.ifPresent(name -> setupAiGame(name, primaryStage));
         }
     }
 
+    private void setupAiGame(String name1, Stage primaryStage){
+        Platform.runLater(() -> {
+            player1 = new GuiPlayer();
+            player1.name = name1;
+            aiPlayer = new AiPlayer();
+            aiPlayer.name = "AI";
+
+
+            aiPlayer.doPlacementPhase();
+
+
+            player1.start(primaryStage);
+            player1.doPlacementPhase().thenRun(this::startAiGame);
+
+
+        });
+
+    }
+
+
+
+    private void startAiGame() {
+        try{
+            System.out.println("this is Ai startGame");
+            doAiAttackingPhase();
+        }catch (IOException e) {
+            System.out.println("this is Ai startGame error");
+            System.out.println(e.getMessage());
+        }
+
+    }
+
+    private void doAiAttackingPhase() throws IOException {
+        System.out.println("this is Ai doAttackingPhase");
+        doAiPlayerTurn(player1, aiPlayer);
+    }
+
+    private void doAiPlayerTurn(GuiPlayer guiPlayer, AiPlayer aiPlayer) throws IOException {
+        System.out.println("this is doPlayerTurn");
+        guiPlayer.setEnemyInfo(aiPlayer.theBoard, aiPlayer.view);
+        guiPlayer.playOneTurn().thenRun(() -> {
+            try {
+                if(guiPlayer.theBoard.is_lost()){
+                    guiPlayer.win_message();
+                    return;
+                }
+                aiPlayer.playOneTurn(guiPlayer.theBoard, guiPlayer.view);
+                if (aiPlayer.theBoard.is_lost()) {
+                    Platform.runLater(guiPlayer::win_message);
+                } else {
+                    doAiPlayerTurn(guiPlayer, aiPlayer);
+                }
+            } catch (IOException e) {
+                System.out.println("this is doPlayerTurn error");
+                System.out.println(e.getMessage());
+            }
+        });
+    }
     private void setupGame(String name1, String name2, Stage primaryStage) {
         Platform.runLater(() -> {
             player1 = new GuiPlayer();
@@ -74,6 +135,7 @@ public class GuiApp extends Application {
             doPlacementPhase().thenRun(this::startGame);
         });
     }
+
 
 
     private CompletableFuture<Void> doPlacementPhase() {

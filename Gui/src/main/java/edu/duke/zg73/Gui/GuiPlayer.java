@@ -30,7 +30,7 @@ public class GuiPlayer extends Application implements Serializable {
 
     public Board<Character> theEnemyBoard;
     public BoardTextView enemyView;
-    private V1ShipFactory shipFactory;
+    private V2ShipFactory shipFactory;
     public String name = "Player 1";
     private ArrayList<String> shipsToPlace;
     private HashMap<String, Function<Placement, Ship<Character>>> shipCreationFns;
@@ -53,7 +53,7 @@ public class GuiPlayer extends Application implements Serializable {
 
     public GuiPlayer() {
         // 初始化工厂、放置列表、创建函数和技能计数
-        shipFactory = new V1ShipFactory();
+        shipFactory = new V2ShipFactory();
         shipsToPlace = new ArrayList<>();
         shipCreationFns = new HashMap<>();
         skill_count = new HashMap<>();
@@ -80,7 +80,7 @@ public class GuiPlayer extends Application implements Serializable {
         this.primaryStage = primaryStage;
 
         // 初始化工厂、棋盘和视图
-        shipFactory = new V1ShipFactory();
+        shipFactory = new V2ShipFactory();
         theBoard = new BattleShipBoard<>(10, 20, 'X');
         view = new BoardTextView(theBoard);
         theEnemyBoard = new BattleShipBoard<>(10, 20, 'X');
