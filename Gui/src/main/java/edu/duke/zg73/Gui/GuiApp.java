@@ -69,10 +69,13 @@ public class GuiApp extends Application {
 
 
             aiPlayer.doPlacementPhase();
+            System.out.println(aiPlayer.view.displayMyOwnBoard());;
+
 
 
             player1.start(primaryStage);
             player1.doPlacementPhase().thenRun(this::startAiGame);
+
 
 
         });
@@ -161,7 +164,7 @@ public class GuiApp extends Application {
 
     private void doPlayerTurn(GuiPlayer attacker, GuiPlayer defender) {
         System.out.println("this is doPlayerTurn");
-        if (!defender.theEnemyBoard.is_lost()) {
+        if (!attacker.theEnemyBoard.is_lost()) {
             attacker.setEnemyInfo(defender.theBoard, defender.view);
             attacker.playOneTurn().thenRun(() -> {
                 Platform.runLater(() -> {

@@ -36,6 +36,8 @@ public class GuiPlayer extends Application implements Serializable {
     private HashMap<String, Function<Placement, Ship<Character>>> shipCreationFns;
     private HashMap<String, Integer> skill_count;
     private Label messageLabel;
+
+    private Label playerNameLabel;
     public GridPane boardGrid;
     public GridPane enemyGrid;
     private Stage primaryStage;
@@ -73,71 +75,103 @@ public class GuiPlayer extends Application implements Serializable {
         this.enemyView = enemyView;
     }
 
-
-
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
 
-        // 初始化工厂、棋盘和视图
+        // Initialization code for factories, boards, views, and game settings
         shipFactory = new V2ShipFactory();
         theBoard = new BattleShipBoard<>(10, 20, 'X');
         view = new BoardTextView(theBoard);
         theEnemyBoard = new BattleShipBoard<>(10, 20, 'X');
         enemyView = new BoardTextView(theEnemyBoard);
 
-        // 初始化放置列表、创建函数和技能计数
         shipsToPlace = new ArrayList<>();
         shipCreationFns = new HashMap<>();
         skill_count = new HashMap<>();
         setupShipCreationList();
-        System.out.println(shipsToPlace);
         setupShipCreationMap();
         initSkillCount();
 
-        // UI 组件初始化
+        // UI Component Initialization
         boardGrid = new GridPane();
         boardGrid.setAlignment(Pos.CENTER);
         enemyGrid = new GridPane();
         enemyGrid.setAlignment(Pos.CENTER);
 
         messageLabel = new Label();
-        messageLabel.setMinHeight(50);  // 提高高度以便更好地显示消息
+        messageLabel.setMinHeight(50);
         messageLabel.setAlignment(Pos.CENTER);
-        messageLabel.setStyle("-fx-font-size: 16px;");  // 增加字体大小
+        messageLabel.setStyle("-fx-font-size: 16px;");
+
+        playerNameLabel = new Label("Player Name: " + name);
+        playerNameLabel.setAlignment(Pos.CENTER);
+        playerNameLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
 
         fireButton = new Button("Fire");
-        moveButton = new Button("Move");
-        sonarButton = new Button("Sonar");
+        moveButton = new Button("Move (" + skill_count.get("M Move a ship to another square") + ")");
+        sonarButton = new Button("Sonar (" + skill_count.get("S Sonar scan") + ")");
 
-
-        HBox buttonBox = new HBox(20, fireButton, moveButton, sonarButton);  // 增加空间以分隔按钮
+        HBox buttonBox = new HBox(20, fireButton, moveButton, sonarButton);
         buttonBox.setAlignment(Pos.CENTER);
 
         initializeEmptyBoard(boardGrid, theBoard);
         initializeEmptyBoard(enemyGrid, theEnemyBoard);
 
+        // Creating row labels (0-9)
+        VBox rowLabelsLeft = createRowLabels(theBoard.getHeight());
+        VBox rowLabelsRight = createRowLabels(theEnemyBoard.getHeight());
 
-        HBox boardsBox = new HBox(30, boardGrid, enemyGrid);  // 增加空间以分隔两个棋盘
+        // Creating column labels (A-T)
+        HBox columnLabelsTop = createColumnLabels(theBoard.getWidth());
+        HBox columnLabelsBottom = createColumnLabels(theEnemyBoard.getWidth());
+
+        // Combine board and labels
+        HBox boardWithLabels = new HBox(rowLabelsLeft, boardGrid);
+        boardWithLabels.setAlignment(Pos.CENTER_LEFT);
+        HBox enemyBoardWithLabels = new HBox(rowLabelsRight, enemyGrid);
+        enemyBoardWithLabels.setAlignment(Pos.CENTER_LEFT);
+
+        // Create a VBox with column labels on top and the board with row labels below
+        VBox boardWithAllLabels = new VBox(columnLabelsTop, boardWithLabels);
+        VBox enemyBoardWithAllLabels = new VBox(columnLabelsBottom, enemyBoardWithLabels);
+
+        // Main layout of the scene
+        HBox boardsBox = new HBox(30, boardWithAllLabels, enemyBoardWithAllLabels);
         boardsBox.setAlignment(Pos.CENTER);
 
-
-
-
-        VBox mainLayout = new VBox(20, buttonBox, boardsBox, messageLabel);
+        VBox mainLayout = new VBox(20, playerNameLabel, buttonBox, boardsBox, messageLabel);
         mainLayout.setAlignment(Pos.CENTER);
 
-
+        // Final scene and stage setup
         BorderPane root = new BorderPane(mainLayout);
-        Scene scene = new Scene(root, 1000, 800);
+        Scene scene = new Scene(root, 1200, 800); // Width may need to be adjusted to fit labels
         primaryStage.setScene(scene);
         primaryStage.setTitle("Battleship Game");
         primaryStage.show();
-
-
-
     }
 
+    private VBox createRowLabels(int numRows) {
+        VBox rowLabels = new VBox();
+        for (int i = 0; i < numRows; i++) {
+            Label label = new Label(Integer.toString(i));
+            label.setMinSize(30, 30);
+            label.setAlignment(Pos.CENTER_RIGHT);
+            rowLabels.getChildren().add(label);
+        }
+        return rowLabels;
+    }
+
+    private HBox createColumnLabels(int numColumns) {
+        HBox columnLabels = new HBox();
+        for (int i = 0; i < numColumns; i++) {
+            Label label = new Label(Character.toString((char) ('A' + i % 26)));
+            label.setMinSize(30, 30);
+            label.setAlignment(Pos.BOTTOM_CENTER);
+            columnLabels.getChildren().add(label);
+        }
+        return columnLabels;
+    }
     public boolean isReady() {
         return isReady;
     }
@@ -214,6 +248,14 @@ public class GuiPlayer extends Application implements Serializable {
                 }
             }
             System.out.println("finish platform");
+        });
+    }
+
+
+    private void updateSkillButtons() {
+        Platform.runLater(() -> {
+            moveButton.setText("Move (" + skill_count.get("M Move a ship to another square") + ")");
+            sonarButton.setText("Sonar (" + skill_count.get("S Sonar scan") + ")");
         });
     }
 
@@ -345,6 +387,7 @@ public class GuiPlayer extends Application implements Serializable {
             });
 //        });
     }
+
     private void executeAttack(Coordinate attackPlace) {
 //        Platform.runLater(() -> {
             Character hitDisplay = theEnemyBoard.whatIsAtForSelf(attackPlace);
@@ -366,8 +409,6 @@ public class GuiPlayer extends Application implements Serializable {
                 }
             }
 
-
-
             updateBoardDisplay(boardGrid, theBoard, true);
             updateBoardDisplay(enemyGrid, theEnemyBoard, false);
 
@@ -382,14 +423,12 @@ public class GuiPlayer extends Application implements Serializable {
             return;
         }
 
-        // 显示可移动的船只
         StringBuilder shipsInfo = new StringBuilder("Available ships to move:\n");
         for (Ship<Character> ship : availableShips) {
             shipsInfo.append(ship.getName()).append("\n");
         }
         showAlert("Available Ships", shipsInfo.toString());
 
-        // 请求用户选择船只
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Move Ship");
         dialog.setHeaderText("Moving Ship");
@@ -424,6 +463,7 @@ public class GuiPlayer extends Application implements Serializable {
 
                         theBoard.moveShip(chosenShipContainer[0], newPlacement);
                         skill_count.put("M Move a ship to another square", skill_count.get("M Move a ship to another square") - 1);
+                        updateSkillButtons();
                         updateBoardDisplay(boardGrid, theBoard, true);
                         updateBoardDisplay(enemyGrid, theEnemyBoard, false);
                     } catch (IllegalArgumentException e) {
@@ -449,7 +489,7 @@ public class GuiPlayer extends Application implements Serializable {
                 performSonarScan(scanCoord);
             } catch (IllegalArgumentException ex) {
                 showAlert("Invalid Coordinate", "Invalid coordinate. Please try again.");
-                doaction_S(); // Reattempt the sonar scan action
+                doaction_S();
             }
         });
     }
@@ -496,6 +536,7 @@ public class GuiPlayer extends Application implements Serializable {
 
         // Update the sonar scan count
         skill_count.put("S Sonar scan", skill_count.get("S Sonar scan") - 1);
+        updateSkillButtons();
     }
 
 
@@ -510,7 +551,9 @@ public class GuiPlayer extends Application implements Serializable {
 
     public CompletableFuture<Void> playOneTurn() {
         CompletableFuture<Void> turnComplete = new CompletableFuture<>();
-
+        messageLabel.setText("This is your turn");
+        updateBoardDisplay(boardGrid, theBoard, true);
+        updateBoardDisplay(enemyGrid, theEnemyBoard, false);
         System.out.println("palyer one turn in gui");
 //        Platform.runLater(() -> {
             if(theEnemyBoard.is_lost()){
@@ -538,6 +581,7 @@ public class GuiPlayer extends Application implements Serializable {
                     updateBoardDisplay(boardGrid, theBoard, true);
                     updateBoardDisplay(enemyGrid, theEnemyBoard, false);
                     System.out.println("update board in play one turn");
+                    messageLabel.setText("Waiting for enemy action");
 
                 }
             });
@@ -549,6 +593,7 @@ public class GuiPlayer extends Application implements Serializable {
                     turnComplete.complete(null); // 标记回合结束
                     updateBoardDisplay(boardGrid, theBoard, true);
                     updateBoardDisplay(enemyGrid, theEnemyBoard, false);
+                    messageLabel.setText("Waiting for enemy action");
                     System.out.println("update board in play one turn");
                 }
             });
@@ -560,6 +605,7 @@ public class GuiPlayer extends Application implements Serializable {
                     turnComplete.complete(null); // 标记回合结束
                     updateBoardDisplay(boardGrid, theBoard, true);
                     updateBoardDisplay(enemyGrid, theEnemyBoard, false);
+                    messageLabel.setText("Waiting for enemy action");
                     System.out.println("update board in play one turn");
                 }
             });
@@ -591,9 +637,18 @@ public class GuiPlayer extends Application implements Serializable {
     }
 
     public void updateButtons() {
-        fireButton.setDisable(!isMyTurn || hasFired);
-        moveButton.setDisable(!isMyTurn || hasMoved || skill_count.get("M Move a ship to another square") <= 0);
-        sonarButton.setDisable(!isMyTurn || hasScanned || skill_count.get("S Sonar scan") <= 0);
+        System.out.println("update buttons with " + name + " turn");
+
+        if (!isMyTurn) {
+            fireButton.setDisable(true);
+            moveButton.setDisable(true);
+            sonarButton.setDisable(true);
+        } else {
+            fireButton.setDisable(hasFired);
+            moveButton.setDisable(hasMoved || skill_count.get("M Move a ship to another square") <= 0);
+            sonarButton.setDisable(hasScanned || skill_count.get("S Sonar scan") <= 0);
+
+        }
     }
 
 
@@ -606,6 +661,13 @@ public class GuiPlayer extends Application implements Serializable {
             showCustomDialog("Game Over", "Player " + name + ", Congratulations! You win!");
 
         });
+    }
+
+    public void loss_message(){
+        Platform.runLater(() -> {
+            showCustomDialog("Game Over", "Player " + name + ", You lose!");
+        });
+
     }
 
     public void setMyBoard(Board<Character> board, BoardTextView view) {
