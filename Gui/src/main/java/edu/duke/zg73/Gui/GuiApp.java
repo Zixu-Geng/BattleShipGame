@@ -69,15 +69,18 @@ public class GuiApp extends Application {
 
 
             aiPlayer.doPlacementPhase();
-            System.out.println(aiPlayer.view.displayMyOwnBoard());;
+
 
 
 
             player1.start(primaryStage);
             player1.doPlacementPhase().thenRun(this::startAiGame);
 
-
-
+            player1.doPlacementPhase().thenRun(() -> {
+                System.out.println("this is start AI GAME");
+                startAiGame();
+                System.out.println("this is flag2");
+            });
         });
 
     }
@@ -124,6 +127,7 @@ public class GuiApp extends Application {
             }
         });
     }
+
     private void setupGame(String name1, String name2, Stage primaryStage) {
         Platform.runLater(() -> {
             player1 = new GuiPlayer();

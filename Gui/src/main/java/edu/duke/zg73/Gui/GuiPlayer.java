@@ -259,9 +259,9 @@ public class GuiPlayer extends Application implements Serializable {
 
     private void setupShipCreationList() {
         shipsToPlace.addAll(Collections.nCopies(0, "Submarine"));
-        shipsToPlace.addAll(Collections.nCopies(0, "Destroyer"));
+        shipsToPlace.addAll(Collections.nCopies(1, "Destroyer"));
         shipsToPlace.addAll(Collections.nCopies(0, "Battleship"));
-        shipsToPlace.addAll(Collections.nCopies(1, "Carrier"));
+        shipsToPlace.addAll(Collections.nCopies(0, "Carrier"));
     }
 
     private void setupShipCreationMap() {
@@ -275,8 +275,6 @@ public class GuiPlayer extends Application implements Serializable {
         skill_count.put("M Move a ship to another square", 3);
         skill_count.put("S Sonar scan", 3);
     }
-
-
     public CompletableFuture<Void> doOnePlacement(String shipName, Function<Placement, Ship<Character>> createFn) {
         CompletableFuture<Void> placementComplete = new CompletableFuture<>();
 
@@ -296,17 +294,45 @@ public class GuiPlayer extends Application implements Serializable {
                         placementComplete.complete(null);
                     } else {
                         showAlert("Error placing " + shipName, error);
-                        doOnePlacement(shipName, createFn);
+                        doOnePlacement(shipName, createFn).thenAccept(placementComplete::complete);
                     }
-                } catch (IllegalArgumentException e) {
+                } catch (IllegalArgumentException ex) {
                     showAlert("Invalid Input", "Please enter a valid position and orientation (e.g., A0V).");
-                    doOnePlacement(shipName, createFn);
+                    doOnePlacement(shipName, createFn).thenAccept(placementComplete::complete);
                 }
             });
         });
 
         return placementComplete;
     }
+
+
+    public CompletableFuture<Void> doPlacementPhase() {
+        CompletableFuture<Void> placementComplete = new CompletableFuture<>();
+        Platform.runLater(() -> {
+            messageLabel.setText("Starting placement phase for " + name + "...");
+        });
+        placeShipsAsync(0, placementComplete);
+        return placementComplete;
+    }
+    private void placeShipsAsync(int index, CompletableFuture<Void> placementComplete) {
+        if (index < shipsToPlace.size()) {
+            String shipName = shipsToPlace.get(index);
+            doOnePlacement(shipName, shipCreationFns.get(shipName))
+                    .thenRun(() -> placeShipsAsync(index + 1, placementComplete))
+                    .exceptionally(ex -> {
+                        System.out.println("Failed to place ship: " + ex.getMessage());
+                        return null;
+                    });
+        } else {
+            Platform.runLater(() -> {
+                messageLabel.setText("All ships placed. Ready to start the game!");
+                placementComplete.complete(null); // 标记放置完成
+            });
+        }
+    }
+
+
 
     private void showAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -333,27 +359,7 @@ public class GuiPlayer extends Application implements Serializable {
         // Show the custom dialog and wait for it to be closed
         dialogStage.showAndWait();
     }
-    public CompletableFuture<Void> doPlacementPhase() {
-        CompletableFuture<Void> placementComplete = new CompletableFuture<>();
-        Platform.runLater(() -> {
-            messageLabel.setText("Starting placement phase for " + name + "...");
-        });
-        placeShipsAsync(0, placementComplete);
-        return placementComplete;
-    }
 
-    private void placeShipsAsync(int index, CompletableFuture<Void> placementComplete) {
-        if (index < shipsToPlace.size()) {
-            String shipName = shipsToPlace.get(index);
-            doOnePlacement(shipName, shipCreationFns.get(shipName))
-                    .thenRun(() -> placeShipsAsync(index + 1, placementComplete));
-        } else {
-            Platform.runLater(() -> {
-                messageLabel.setText("All ships placed. Ready to start the game!");
-                placementComplete.complete(null); // 标记放置完成
-            });
-        }
-    }
 
 
     public void doaction_F() {
@@ -560,7 +566,7 @@ public class GuiPlayer extends Application implements Serializable {
         messageLabel.setText("This is your turn");
         updateBoardDisplay(boardGrid, theBoard, true);
         updateBoardDisplay(enemyGrid, theEnemyBoard, false);
-        System.out.println("palyer one turn in gui");
+        System.out.println("player one turn in gui");
 //        Platform.runLater(() -> {
             if(theEnemyBoard.is_lost()){
                 showCustomDialog("Game Over", "Player " + name + ", You win!");
