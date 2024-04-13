@@ -101,36 +101,6 @@ public class AiPlayer {
         return "" + colLetter + row;
     }
 
-
-    protected void doaction_F(Board<Character> enemyBoard, BoardTextView enemyView) {
-        while(true){
-            try{
-                String s;
-                Coordinate attack_place;
-                attack_place = ai.next_attack();
-                System.out.println("AI attacking at " + attack_place);
-                Character hit_display = enemyBoard.whatIsAtForSelf(attack_place);
-                Ship<Character> hit_ship = enemyBoard.fireAt(attack_place);
-                if(hit_ship == null){
-                    ai.hitFail.add(attack_place);
-                    System.out.println("AI missed at " + attack_place);
-                }else{
-                    if(hit_display == '*'){
-                        System.out.println("Already Hit that Place!");
-                    }else{
-                        ai.hitSuccess.add(attack_place);
-                        System.out.println("AI hit at " + attack_place);
-                    }
-                }
-                break;
-
-
-            }catch (IllegalArgumentException e){
-                System.out.println(e.getMessage());
-            }
-        }
-    }
-
     protected void doaction_S(Board<Character> enemyBoard, BoardTextView enemyView) throws IOException{}
 
     protected void doaction_M(Board<Character> enemyBoard, BoardTextView enemyView) throws IOException{}
@@ -167,66 +137,152 @@ public class AiPlayer {
 
 
 
+    protected void doaction_F(Board<Character> enemyBoard, BoardTextView enemyView) {
+        while(true){
+            try{
+                String s;
+                Coordinate attack_place;
+                attack_place = ai.next_attack();
+                System.out.println("AI attacking at " + attack_place);
+                Character hit_display = enemyBoard.whatIsAtForSelf(attack_place);
+                Ship<Character> hit_ship = enemyBoard.fireAt(attack_place);
+                if(hit_ship == null){
+                    ai.attackFail(attack_place);
+                    System.out.println("AI missed at " + attack_place);
+                }else{
+                    if(hit_display == '*'){
+                        System.out.println("Already Hit that Place!");
+                    }else{
+                        ai.attackSuccess(attack_place, hit_display);
+                        System.out.println("AI hit at " + attack_place);
+                    }
+                }
+                break;
 
-    private class AILogic implements Serializable {
-        public HashSet<Coordinate> hitSuccess;
+
+            }catch (IllegalArgumentException e){
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+
+    public class AILogic implements Serializable {
+        public HashMap<Character, HashSet<Coordinate>> hitSuccess;
         public HashSet<Coordinate> hitFail;
         public HashMap<Coordinate, Integer> alreadyAttacked;
+
+        public HashMap<Character, ShipAttackPattern> attackPatterns;
+
         private int currentRound = 0;
+        private int AttackMode = 0;
 
         public AILogic() {
-            hitSuccess = new HashSet<>();
+            hitSuccess = new HashMap<>();
             hitFail = new HashSet<>();
             alreadyAttacked = new HashMap<>();
+            attackPatterns = new HashMap<>();
+            initializeAttackPatterns();
+        }
+
+        private void initializeAttackPatterns() {
+
+            attackPatterns.put('s', new SubmarineAttackPattern());
+            attackPatterns.put('b', new BattleshipAttackPattern());
 
         }
 
         public int hammingDistance(Coordinate c1, Coordinate c2) {
-            int res = Math.abs(c1.getColumn() - c2.getColumn()) + Math.abs(c1.getRow() - c2.getRow());
-            return res;
+            return Math.abs(c1.getColumn() - c2.getColumn()) + Math.abs(c1.getRow() - c2.getRow());
         }
 
         public int heuristic(Coordinate c) {
             int baseScore = 100;
 
-            if (alreadyAttacked.containsKey(c)) {
-                int roundsSinceAttack = currentRound - alreadyAttacked.get(c);
-                baseScore -= Math.max(0, 50 - roundsSinceAttack * 5);
+
+
+            for(Character ship : hitSuccess.keySet()){
+                for (Coordinate h : hitSuccess.get(ship)){
+                    int distance = hammingDistance(c, h);
+                    baseScore -= 2 * distance;
+                }
             }
 
-            for (Coordinate h : hitSuccess) {
-                int distance = hammingDistance(c, h);
-                baseScore -= 2 * distance;
-            }
             for (Coordinate h : hitFail) {
                 int distance = hammingDistance(c, h);
                 baseScore += distance;
             }
 
+
+
             return baseScore;
         }
 
-        public Coordinate next_attack() {
+        public Coordinate randomSearch() {
             currentRound++;
-            int max_score = Integer.MIN_VALUE;
+            int maxScore = Integer.MIN_VALUE;
             Coordinate next = null;
             for (int i = 0; i < theBoard.getHeight(); i++) {
                 for (int j = 0; j < theBoard.getWidth(); j++) {
-
                     Coordinate c = new Coordinate(i, j);
                     int currentScore = heuristic(c);
-                    if (currentScore > max_score) {
+                    if (currentScore > maxScore && !alreadyAttacked.containsKey(c)) {
                         next = c;
-                        max_score = currentScore;
+                        maxScore = currentScore;
                     }
                 }
             }
-
-
-
             alreadyAttacked.put(next, currentRound);
-
             return next;
         }
+
+        public Coordinate Attacking() {
+            for (Map.Entry<Character, HashSet<Coordinate>> entry : hitSuccess.entrySet()) {
+                ShipAttackPattern attackPattern = attackPatterns.get(entry.getKey());
+                if (attackPattern != null) {
+                    List<Coordinate> potentialTargets = attackPattern.generateAttackTargets(entry.getValue());
+                    for (Coordinate target : potentialTargets) {
+                        if (isValidTarget(target)) {
+                            alreadyAttacked.put(target, currentRound);
+                            return target;
+                        }
+                    }
+                }
+            }
+            AttackMode = 0;
+            return randomSearch();
+        }
+
+
+
+        public Coordinate next_attack() {
+            if(AttackMode == 0){
+                return randomSearch();
+            }else{
+                return Attacking();
+            }
+        }
+
+        public void attackSuccess(Coordinate c, Character ship){
+            hitSuccess.putIfAbsent(ship, new HashSet<>());
+            hitSuccess.get(ship).add(c);
+            AttackMode = 1;
+        }
+
+        public void attackFail(Coordinate c){
+            hitFail.add(c);
+            alreadyAttacked.put(c, currentRound);
+        }
+
+
+
+        private boolean isValidTarget(Coordinate c) {
+            return c.getRow() >= 0 && c.getRow() < theBoard.getHeight() &&
+                    c.getColumn() >= 0 && c.getColumn() < theBoard.getWidth() &&
+                    !alreadyAttacked.containsKey(c);
+        }
+
+
     }
+
 }

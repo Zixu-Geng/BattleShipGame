@@ -57,6 +57,36 @@ public class GuiGameSession implements Runnable {
 
     }
 
+
+
+    private void sendGameStarts() {
+        CommunicateUtils.recv("receive Game starts from player1", player1Socket);
+        CommunicateUtils.send("send name to player1", player1Socket, "Player 1");
+
+        CommunicateUtils.recv("receive Game starts from player2", player2Socket);
+        CommunicateUtils.send("send name to player2", player2Socket, "Player 2");
+
+        player1Board = (Board<Character>) CommunicateUtils.recv("receive player1", player1Socket);
+        player1View = (BoardTextView) CommunicateUtils.recv("receive player1 view", player1Socket);
+
+        player2Board = (Board<Character>) CommunicateUtils.recv("receive player2", player2Socket);
+        player2View = (BoardTextView) CommunicateUtils.recv("receive player2 view", player2Socket);
+
+
+        CommunicateUtils.send("send board of player1 to player2", player2Socket, player1Board);
+        CommunicateUtils.send("send view of player1 to player2", player2Socket, player1View);
+
+        CommunicateUtils.send("send board of player2 to player1", player1Socket, player2Board);
+        CommunicateUtils.send("send view of player2 to player1", player1Socket, player2View);
+        System.out.println("display board");
+        System.out.println(player1View.displayMyOwnBoard());
+        System.out.println(player2View.displayMyOwnBoard());
+        System.out.println("finish display");
+        CommunicateUtils.send("receive board of player1", player1Socket, "received board1");
+        CommunicateUtils.send("receive board of player2", player2Socket, "received board2");
+
+
+    }
     public void handleplayer1Turn(){
         CommunicateUtils.send("send player1 board to player1", player1Socket, player1Board);
         CommunicateUtils.send("send player1 view to player1", player1Socket, player1View);
@@ -111,33 +141,5 @@ public class GuiGameSession implements Runnable {
 
 
 
-    private void sendGameStarts() {
-        CommunicateUtils.send("send Game starts to player1", player1Socket, "Game starts!!");
-        CommunicateUtils.send("send name to player1", player1Socket, "Player 1");
-
-        CommunicateUtils.send("send Game starts to player2", player2Socket, "Game starts!!");
-        CommunicateUtils.send("send name to player2", player2Socket, "Player 2");
-
-        player1Board = (Board<Character>) CommunicateUtils.recv("receive player1", player1Socket);
-        player1View = (BoardTextView) CommunicateUtils.recv("receive player1 view", player1Socket);
-
-        player2Board = (Board<Character>) CommunicateUtils.recv("receive player2", player2Socket);
-        player2View = (BoardTextView) CommunicateUtils.recv("receive player2 view", player2Socket);
-
-
-        CommunicateUtils.send("send board of player1 to player2", player2Socket, player1Board);
-        CommunicateUtils.send("send view of player1 to player2", player2Socket, player1View);
-
-        CommunicateUtils.send("send board of player2 to player1", player1Socket, player2Board);
-        CommunicateUtils.send("send view of player2 to player1", player1Socket, player2View);
-        System.out.println("display board");
-        System.out.println(player1View.displayMyOwnBoard());
-        System.out.println(player2View.displayMyOwnBoard());
-        System.out.println("finish display");
-        CommunicateUtils.send("receive board of player1", player1Socket, "received board1");
-        CommunicateUtils.send("receive board of player2", player2Socket, "received board2");
-
-
-    }
 
 }

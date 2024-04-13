@@ -224,7 +224,7 @@ public class GuiPlayer extends Application implements Serializable {
                     cellLabel.setAlignment(Pos.CENTER);
                     cellLabel.setStyle("-fx-border-color: black; -fx-border-width: 0.5;"); // 设置边框样式
 
-                    // 根据单元格内容改变背景颜色
+
                     if (cellContent == null) {
                         cellLabel.setStyle(cellLabel.getStyle() + "-fx-background-color: lightblue;"); // 空水域
                     } else {
@@ -267,9 +267,6 @@ public class GuiPlayer extends Application implements Serializable {
         shipsToPlace.addAll(Collections.nCopies(0, "Destroyer"));
         shipsToPlace.addAll(Collections.nCopies(0, "Battleship"));
         shipsToPlace.addAll(Collections.nCopies(0, "Carrier"));
-//        shipsToPlace.addAll(Collections.nCopies(3, "Destroyer"));
-//        shipsToPlace.addAll(Collections.nCopies(3, "Battleship"));
-//        shipsToPlace.addAll(Collections.nCopies(2, "Carrier"));
     }
 
     private void setupShipCreationMap() {

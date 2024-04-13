@@ -1,5 +1,7 @@
 package edu.duke.zg73.Server;
 
+import edu.duke.zg73.battleship.Utils.CommunicateUtils;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -41,7 +43,8 @@ public class Server {
             System.out.println("Waiting for the second client to connect...");
             Socket clientSocket2 = serverSocket.accept();
             System.out.println("Second client connected: " + clientSocket2.getInetAddress().getHostAddress());
-
+            CommunicateUtils.send("send Game starts to player1", clientSocket1, "Game starts!!");
+            CommunicateUtils.send("send Game starts to player2", clientSocket2, "Game starts!!");
             GuiGameSession guigameSession = new GuiGameSession(clientSocket1, clientSocket2);
 
             executorService.submit(guigameSession);
