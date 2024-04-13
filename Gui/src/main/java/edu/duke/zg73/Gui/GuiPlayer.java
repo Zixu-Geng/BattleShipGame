@@ -214,10 +214,6 @@ public class GuiPlayer extends Application implements Serializable {
                     }else{
                         cellContent = theBoard.whatIsAtForEnemy(new Coordinate(row, col));
                     }
-                    if(cellContent != null){
-                        System.out.println("cellContent: " + cellContent);
-                        System.out.println("row: " + row + " col: " + col);
-                    }
 
                     Label cellLabel = new Label(cellContent == null ? "" : cellContent.toString());
                     cellLabel.setMinSize(30, 30);
@@ -247,7 +243,6 @@ public class GuiPlayer extends Application implements Serializable {
                     boardGrid.getChildren().add(cellLabel);
                 }
             }
-            System.out.println("finish platform");
         });
     }
 
@@ -263,10 +258,10 @@ public class GuiPlayer extends Application implements Serializable {
 
 
     private void setupShipCreationList() {
-        shipsToPlace.addAll(Collections.nCopies(1, "Submarine"));
+        shipsToPlace.addAll(Collections.nCopies(0, "Submarine"));
         shipsToPlace.addAll(Collections.nCopies(0, "Destroyer"));
         shipsToPlace.addAll(Collections.nCopies(0, "Battleship"));
-        shipsToPlace.addAll(Collections.nCopies(0, "Carrier"));
+        shipsToPlace.addAll(Collections.nCopies(1, "Carrier"));
     }
 
     private void setupShipCreationMap() {
@@ -499,12 +494,22 @@ public class GuiPlayer extends Application implements Serializable {
         for (int i = scanCoord.getRow() - maxDistance; i <= scanCoord.getRow() + maxDistance; i++) {
             for (int j = scanCoord.getColumn() - maxDistance; j <= scanCoord.getColumn() + maxDistance; j++) {
                 if (i >= 0 && i < theEnemyBoard.getHeight() && j >= 0 && j < theEnemyBoard.getWidth()) {
-                    Coordinate currentCoord = new Coordinate(i, j);
-                    Character result = theEnemyBoard.whatIsAtForEnemy(currentCoord);
-                    System.out.println("Sonar scan at " + currentCoord + " found: " + result);
-                    if(result == null){
-                        break;
+
+
+
+                    Character result = theEnemyBoard.whatIsAtForSelf(new Coordinate(i, j));
+                    Character result2 = theEnemyBoard.whatIsAtForEnemy(new Coordinate(i, j));
+
+
+                    if (result == null) continue;
+
+                    if(result == '*'){
+                        result = result2;
                     }
+
+                    System.out.println("this is result for coordinate: " + i + " " + j + ", this is for self" + result + ", this is result for enemy: " + result2);
+
+
                     switch (result) {
                         case 's': scanResult[0]++; break;
                         case 'd': scanResult[1]++; break;
@@ -514,9 +519,13 @@ public class GuiPlayer extends Application implements Serializable {
                         case 'C': scanResult[3]++; break;
                         default: break; // 不计算找不到或为空的情况
                     }
+
+
                 }
             }
         }
+
+        System.out.println("this is scan result: " + scanResult[0] + " " + scanResult[1] + " " + scanResult[2] + " " + scanResult[3]);
 
         // Display the results in a dialog instead of the messageArea
         String scanResultsMessage = String.format(
@@ -579,6 +588,8 @@ public class GuiPlayer extends Application implements Serializable {
                     updateBoardDisplay(enemyGrid, theEnemyBoard, false);
                     System.out.println("update board in play one turn");
                     messageLabel.setText("Waiting for enemy action");
+                    System.out.println(enemyView.displayMyOwnBoard());
+                    System.out.println(view.displayEnemyBoard());
 
                 }
             });

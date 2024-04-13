@@ -10,8 +10,9 @@ import java.util.function.Function;
 
 public class AiPlayer {
 
-    public final Board theBoard;
-    public final BoardTextView view;
+    public Board theBoard;
+    public BoardTextView view;
+
 
     final V2ShipFactory shipFactory;
     String name;
@@ -75,6 +76,7 @@ public class AiPlayer {
                 }
             }
         }
+
     }
     protected String ai_generatePlacement(String shipname){
         if(shipname == "Submarine") {
@@ -106,6 +108,7 @@ public class AiPlayer {
     protected void doaction_M(Board<Character> enemyBoard, BoardTextView enemyView) throws IOException{}
 
     public void playOneTurn(Board<Character> enemyBoard, BoardTextView enemyView) throws IOException {
+        System.out.println("this is AI mode: " + ai.AttackMode);
         boolean isTest = true;
         while(isTest){
 //            isTest = false;
@@ -122,6 +125,11 @@ public class AiPlayer {
                 }else{
                     throw new IllegalArgumentException("Invalid action");
                 }
+
+
+                view.displayMyOwnBoard();
+                view.displayEnemyBoard();
+
 
             }catch (IllegalArgumentException e){
                 System.out.println(e.getMessage());
@@ -168,17 +176,19 @@ public class AiPlayer {
 
 
     public class AILogic implements Serializable {
+        public HashMap<Character, HashSet<Coordinate>> allSuccess;
         public HashMap<Character, HashSet<Coordinate>> hitSuccess;
         public HashSet<Coordinate> hitFail;
         public HashMap<Coordinate, Integer> alreadyAttacked;
-
         public HashMap<Character, ShipAttackPattern> attackPatterns;
+        public  int currentRound = 0;
+        public int AttackMode = 0;
 
-        private int currentRound = 0;
-        private int AttackMode = 0;
+
 
         public AILogic() {
             hitSuccess = new HashMap<>();
+            allSuccess = new HashMap<>();
             hitFail = new HashSet<>();
             alreadyAttacked = new HashMap<>();
             attackPatterns = new HashMap<>();
@@ -186,9 +196,10 @@ public class AiPlayer {
         }
 
         private void initializeAttackPatterns() {
-
             attackPatterns.put('s', new SubmarineAttackPattern());
             attackPatterns.put('b', new BattleshipAttackPattern());
+            attackPatterns.put('d', new DestroyerAttackPattern());
+            attackPatterns.put('c', new CarrierAttackPattern());
 
         }
 
@@ -198,23 +209,16 @@ public class AiPlayer {
 
         public int heuristic(Coordinate c) {
             int baseScore = 100;
-
-
-
-            for(Character ship : hitSuccess.keySet()){
-                for (Coordinate h : hitSuccess.get(ship)){
+            for(Character ship : allSuccess.keySet()){
+                for (Coordinate h : allSuccess.get(ship)){
                     int distance = hammingDistance(c, h);
                     baseScore -= 2 * distance;
                 }
             }
-
-            for (Coordinate h : hitFail) {
-                int distance = hammingDistance(c, h);
-                baseScore += distance;
-            }
-
-
-
+//            for (Coordinate h : hitFail) {
+//                int distance = hammingDistance(c, h);
+//                baseScore += distance;
+//            }
             return baseScore;
         }
 
@@ -239,6 +243,7 @@ public class AiPlayer {
         public Coordinate Attacking() {
             for (Map.Entry<Character, HashSet<Coordinate>> entry : hitSuccess.entrySet()) {
                 ShipAttackPattern attackPattern = attackPatterns.get(entry.getKey());
+                System.out.println("AI attacking at " + entry.getKey());
                 if (attackPattern != null) {
                     List<Coordinate> potentialTargets = attackPattern.generateAttackTargets(entry.getValue());
                     for (Coordinate target : potentialTargets) {
@@ -249,11 +254,8 @@ public class AiPlayer {
                     }
                 }
             }
-            AttackMode = 0;
             return randomSearch();
         }
-
-
 
         public Coordinate next_attack() {
             if(AttackMode == 0){
@@ -263,18 +265,33 @@ public class AiPlayer {
             }
         }
 
-        public void attackSuccess(Coordinate c, Character ship){
+        public void attackSuccess(Coordinate c, Character ship) {
             hitSuccess.putIfAbsent(ship, new HashSet<>());
             hitSuccess.get(ship).add(c);
-            AttackMode = 1;
+            allSuccess.putIfAbsent(ship, new HashSet<>());
+            allSuccess.get(ship).add(c);
+            if (ship == 's' && hitSuccess.get(ship).size() == 2) {
+                hitSuccess.get(ship).clear();
+            }else if (ship == 'b' && hitSuccess.get(ship).size() == 4) {
+                hitSuccess.get(ship).clear();
+            }else if (ship == 'd' && hitSuccess.get(ship).size() == 3) {
+                hitSuccess.get(ship).clear();
+            }else if (ship == 'c' && hitSuccess.get(ship).size() == 7) {
+                hitSuccess.get(ship).clear();
+            }
+            updateAttackMode();
+
+        }
+
+        public void updateAttackMode() {
+            boolean hasActiveHits = hitSuccess.values().stream().anyMatch(set -> !set.isEmpty());
+            AttackMode = hasActiveHits ? 1 : 0;
         }
 
         public void attackFail(Coordinate c){
             hitFail.add(c);
             alreadyAttacked.put(c, currentRound);
         }
-
-
 
         private boolean isValidTarget(Coordinate c) {
             return c.getRow() >= 0 && c.getRow() < theBoard.getHeight() &&

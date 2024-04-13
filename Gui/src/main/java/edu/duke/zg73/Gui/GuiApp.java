@@ -109,7 +109,10 @@ public class GuiApp extends Application {
                     guiPlayer.win_message();
                     return;
                 }
+
                 aiPlayer.playOneTurn(guiPlayer.theBoard, guiPlayer.view);
+
+
                 if (aiPlayer.theBoard.is_lost()) {
                     Platform.runLater(guiPlayer::win_message);
                 } else {

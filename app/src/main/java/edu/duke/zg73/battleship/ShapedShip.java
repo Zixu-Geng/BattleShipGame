@@ -10,6 +10,8 @@ public class ShapedShip<T> extends BasicShip<T> implements Serializable {
 
     protected final Character orientation;
 
+    public int id;
+
     /**
      * Constructs a shaped ship with the specified name, placement, and display information.
      * @param name the name of the ship

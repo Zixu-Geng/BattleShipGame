@@ -3,8 +3,8 @@ package edu.duke.zg73.Gui;
 import edu.duke.zg73.battleship.Coordinate;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Comparator;
+import java.util.HashSet;
 
 public class CarrierAttackPattern extends ShipAttackPattern {
     @Override
@@ -15,34 +15,49 @@ public class CarrierAttackPattern extends ShipAttackPattern {
     private ArrayList<Coordinate> generateCarrierAttackTargets(HashSet<Coordinate> hits) {
         ArrayList<Coordinate> targets = new ArrayList<>();
         if (hits.isEmpty()) {
-            return targets; // 如果没有击中，返回空列表
+            return targets;
         }
 
-        // 使用一个简单的方法来生成周围可能的攻击目标，特别是当击中较少时
-        hits.forEach(hit -> {
-            // 周围四个方向
-            targets.add(new Coordinate(hit.getRow() - 1, hit.getColumn())); // 上
-            targets.add(new Coordinate(hit.getRow() + 1, hit.getColumn())); // 下
-            targets.add(new Coordinate(hit.getRow(), hit.getColumn() - 1)); // 左
-            targets.add(new Coordinate(hit.getRow(), hit.getColumn() + 1)); // 右
-            // 对角线方向，因为“L”型结构可能在拐角处
-            targets.add(new Coordinate(hit.getRow() - 1, hit.getColumn() - 1)); // 左上
-            targets.add(new Coordinate(hit.getRow() - 1, hit.getColumn() + 1)); // 右上
-            targets.add(new Coordinate(hit.getRow() + 1, hit.getColumn() - 1)); // 左下
-            targets.add(new Coordinate(hit.getRow() + 1, hit.getColumn() + 1)); // 右下
-        });
+        // Determine the bounds of the hits to estimate the orientation and part of the carrier
+        int minRow = hits.stream().min(Comparator.comparingInt(Coordinate::getRow)).get().getRow();
+        int maxRow = hits.stream().max(Comparator.comparingInt(Coordinate::getRow)).get().getRow();
+        int minCol = hits.stream().min(Comparator.comparingInt(Coordinate::getColumn)).get().getColumn();
+        int maxCol = hits.stream().max(Comparator.comparingInt(Coordinate::getColumn)).get().getColumn();
 
-        // 如果击中大于等于4，尝试具体定位“L”形状
+        // Infer the possible shape and generate targets based on the number of hits
         if (hits.size() >= 4) {
-            int minRow = hits.stream().min(Comparator.comparingInt(Coordinate::getRow)).get().getRow();
-            int maxRow = hits.stream().max(Comparator.comparingInt(Coordinate::getRow)).get().getRow();
-            int minCol = hits.stream().min(Comparator.comparingInt(Coordinate::getColumn)).get().getColumn();
-            int maxCol = hits.stream().max(Comparator.comparingInt(Coordinate::getColumn)).get().getColumn();
-            // 添加可能的“L”型拐角未击中部分
-            targets.add(new Coordinate(minRow - 1, maxCol + 1)); // 假设“L”型可能在顶部左侧或右侧
-            targets.add(new Coordinate(maxRow + 1, minCol - 1)); // 假设“L”型可能在底部左侧
+            inferCarrierShape(hits, targets, minRow, maxRow, minCol, maxCol);
+        } else {
+            // For fewer hits, consider surrounding potential targets
+            for (Coordinate hit : hits) {
+                addSurroundingTargets(hit, targets);
+            }
         }
 
         return targets;
+    }
+
+    private void addSurroundingTargets(Coordinate hit, ArrayList<Coordinate> targets) {
+        int row = hit.getRow();
+        int col = hit.getColumn();
+        targets.add(new Coordinate(row - 1, col)); // North
+        targets.add(new Coordinate(row + 1, col)); // South
+        targets.add(new Coordinate(row, col - 1)); // West
+        targets.add(new Coordinate(row, col + 1)); // East
+    }
+
+    private void inferCarrierShape(HashSet<Coordinate> hits, ArrayList<Coordinate> targets, int minRow, int maxRow, int minCol, int maxCol) {
+        // Attempt to determine if we have a vertical configuration
+        if ((maxRow - minRow >= 4) && (maxCol - minCol >= 1)) {
+            // Possible vertical carrier with extension to the right on the bottom
+            targets.add(new Coordinate(minRow - 1, minCol)); // Above the topmost part
+            targets.add(new Coordinate(maxRow + 1, minCol)); // Below the bottom part
+            targets.add(new Coordinate(maxRow + 1, minCol + 1)); // Extension below the bottom part to the right
+        } else {
+            // General case, add targets around all known hits
+            for (Coordinate hit : hits) {
+                addSurroundingTargets(hit, targets);
+            }
+        }
     }
 }

@@ -24,8 +24,8 @@ public class BattleshipAttackPattern extends ShipAttackPattern{
             for (Coordinate center : hits) {
                 int row = center.getRow();
                 int col = center.getColumn();
-                boolean couldBeCenter = hits.contains(new Coordinate(row, col + 1))  // 检查右边
-                        && hits.contains(new Coordinate(row + 1, col));  // 检查下边
+                boolean couldBeCenter = hits.contains(new Coordinate(row, col + 1))
+                        && hits.contains(new Coordinate(row + 1, col));
 
                 if (couldBeCenter) {
                     Coordinate top = new Coordinate(row - 1, col);

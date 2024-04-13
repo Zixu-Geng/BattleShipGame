@@ -12,6 +12,7 @@ public class RectangleShip<T> extends BasicShip<T> implements Serializable {
 
     protected final Character orientation;
 
+    public int id;
 
 
     /**
