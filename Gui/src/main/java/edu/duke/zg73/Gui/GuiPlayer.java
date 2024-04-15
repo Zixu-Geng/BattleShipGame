@@ -74,7 +74,6 @@ public class GuiPlayer extends Application implements Serializable {
         this.theEnemyBoard = enemyBoard;
         this.enemyView = enemyView;
     }
-
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
@@ -118,23 +117,23 @@ public class GuiPlayer extends Application implements Serializable {
         initializeEmptyBoard(boardGrid, theBoard);
         initializeEmptyBoard(enemyGrid, theEnemyBoard);
 
-        // Creating row labels (0-9)
-        VBox rowLabelsLeft = createRowLabels(theBoard.getHeight());
-        VBox rowLabelsRight = createRowLabels(theEnemyBoard.getHeight());
+        // Creating column labels (0-9) and updating row labels (A-T)
+        HBox columnLabelsTop = createColumnLabels(theBoard.getWidth()); // Now this creates 0-9
+        HBox columnLabelsBottom = createColumnLabels(theEnemyBoard.getWidth()); // Same here
+        VBox rowLabelsLeft = createRowLabels(theBoard.getHeight()); // This now creates A-T
+        VBox rowLabelsRight = createRowLabels(theEnemyBoard.getHeight()); // And here as well
 
-        // Creating column labels (A-T)
-        HBox columnLabelsTop = createColumnLabels(theBoard.getWidth());
-        HBox columnLabelsBottom = createColumnLabels(theEnemyBoard.getWidth());
+        // Combine board and column labels
+        VBox boardWithLabels = new VBox(columnLabelsTop, boardGrid);
+        boardWithLabels.setAlignment(Pos.CENTER);
+        VBox enemyBoardWithLabels = new VBox(columnLabelsBottom, enemyGrid);
+        enemyBoardWithLabels.setAlignment(Pos.CENTER);
 
-        // Combine board and labels
-        HBox boardWithLabels = new HBox(rowLabelsLeft, boardGrid);
-        boardWithLabels.setAlignment(Pos.CENTER_LEFT);
-        HBox enemyBoardWithLabels = new HBox(rowLabelsRight, enemyGrid);
-        enemyBoardWithLabels.setAlignment(Pos.CENTER_LEFT);
-
-        // Create a VBox with column labels on top and the board with row labels below
-        VBox boardWithAllLabels = new VBox(columnLabelsTop, boardWithLabels);
-        VBox enemyBoardWithAllLabels = new VBox(columnLabelsBottom, enemyBoardWithLabels);
+        // Create an HBox with row labels on the left and the board with column labels on top
+        HBox boardWithAllLabels = new HBox(rowLabelsLeft, boardWithLabels);
+        boardWithAllLabels.setAlignment(Pos.CENTER_LEFT);
+        HBox enemyBoardWithAllLabels = new HBox(rowLabelsRight, enemyBoardWithLabels);
+        enemyBoardWithAllLabels.setAlignment(Pos.CENTER_LEFT);
 
         // Main layout of the scene
         HBox boardsBox = new HBox(30, boardWithAllLabels, enemyBoardWithAllLabels);
@@ -150,11 +149,14 @@ public class GuiPlayer extends Application implements Serializable {
         primaryStage.setTitle("Battleship Game");
         primaryStage.show();
     }
-
     private VBox createRowLabels(int numRows) {
         VBox rowLabels = new VBox();
+        Label emptyLabel = new Label("");
+        emptyLabel.setMinSize(30, 30);
+        rowLabels.getChildren().add(emptyLabel); // This will add an empty space above "A"
+
         for (int i = 0; i < numRows; i++) {
-            Label label = new Label(Integer.toString(i));
+            Label label = new Label(Character.toString((char) ('A' + i)));
             label.setMinSize(30, 30);
             label.setAlignment(Pos.CENTER_RIGHT);
             rowLabels.getChildren().add(label);
@@ -162,18 +164,16 @@ public class GuiPlayer extends Application implements Serializable {
         return rowLabels;
     }
 
+
     private HBox createColumnLabels(int numColumns) {
         HBox columnLabels = new HBox();
         for (int i = 0; i < numColumns; i++) {
-            Label label = new Label(Character.toString((char) ('A' + i % 26)));
+            Label label = new Label(Integer.toString(i));
             label.setMinSize(30, 30);
             label.setAlignment(Pos.BOTTOM_CENTER);
             columnLabels.getChildren().add(label);
         }
         return columnLabels;
-    }
-    public boolean isReady() {
-        return isReady;
     }
 
 
@@ -258,8 +258,8 @@ public class GuiPlayer extends Application implements Serializable {
 
 
     private void setupShipCreationList() {
-        shipsToPlace.addAll(Collections.nCopies(0, "Submarine"));
-        shipsToPlace.addAll(Collections.nCopies(1, "Destroyer"));
+        shipsToPlace.addAll(Collections.nCopies(2, "Submarine"));
+        shipsToPlace.addAll(Collections.nCopies(0, "Destroyer"));
         shipsToPlace.addAll(Collections.nCopies(0, "Battleship"));
         shipsToPlace.addAll(Collections.nCopies(0, "Carrier"));
     }
